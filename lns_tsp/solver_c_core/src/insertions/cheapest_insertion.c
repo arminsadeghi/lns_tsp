@@ -13,23 +13,22 @@
 void cheapest_insertion_c(TSPInstance *instance, NodeList *tour,
                           NodeList *nodes_to_add) {
   // Inserts nodes based on their insertion cost.
-
   while (true) {
-    NodeList *nearest_node = NULL;
-    NodeList *current_nodes_to_add = nodes_to_add;
+    NodeList *current_node_to_add = nodes_to_add;
     Insertion best_insertion;
-    NodeList *node_to_insert = NULL;
     best_insertion.cost = DBL_MAX;
+    NodeList *node_to_insert = NULL;
     while (true) {
       Insertion insertion =
-          best_insertion_c(instance, tour, current_nodes_to_add);
+          best_insertion_c(instance, tour, current_node_to_add);
+
       if (insertion.cost < best_insertion.cost) {
         best_insertion.cost = insertion.cost;
         best_insertion.pos = insertion.pos;
-        node_to_insert = current_nodes_to_add;
+        node_to_insert = current_node_to_add;
       }
-      current_nodes_to_add = current_nodes_to_add->next;
-      if (current_nodes_to_add == nodes_to_add)
+      current_node_to_add = current_node_to_add->next;
+      if (current_node_to_add == nodes_to_add)
         break;
     }
     if (best_insertion.pos == NULL) {

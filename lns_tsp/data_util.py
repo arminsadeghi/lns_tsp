@@ -3,10 +3,7 @@
 # pylint: disable=import-error
 from typing import List
 
-from lns_tsp.location import Location
-from lns_tsp.node import Node
 from lns_tsp.setup_logger import get_logger
-from lns_tsp.tsp_instance import TSPInstance
 
 logger = get_logger(__name__)
 
@@ -42,26 +39,7 @@ class DataLoader:
         return optimal_tour
 
     @staticmethod
-    def read_node_section(data: list, instance: TSPInstance):
-        """
-        reads the node section of the instance
-        """
-        try:
-            for _, line in enumerate(data):
-                if line.strip() == "EOF":
-                    break
-                node_id, node_x, node_y = list(
-                    filter(lambda x: x != "", line.split(" "))
-                )
-                instance.nodes.append(
-                    Node(int(node_id), Location(float(node_x), float(node_y)))
-                )
-            assert len(instance.nodes) == instance.dimension
-        except Exception as exc:
-            raise FileExistsError("File is empty") from exc
-
-    @staticmethod
-    def read_edge_weight_section(data: list, instance: TSPInstance):
+    def read_edge_weight_section(data: list, instance):
         """reads the edge weight section of the instance"""
         data = " ".join(data).split()
         instance.init_dist_matrix()
@@ -111,57 +89,6 @@ class DataLoader:
             raise ValueError("Error in reading the edge weight section") from exc
         return instance
 
-    # pylint: disable=too-many-branches
-    @staticmethod
-    def read_data(filename: str):
-        """reads the TSP data from the file"""
-        logger.info("Reading data from %s", filename)
-        if filename.split(".")[-1] != "tsp":
-            raise FileExistsError("File name must end with .tsp")
-
-        instance = TSPInstance()
-        with open(filename, "r", encoding="utf-8") as file:
-            data = file.readlines()
-            folder_name = "/".join(filename.split("/")[:-1])
-            for idx, line in enumerate(data):
-                content = line.split(":")
-                if content[0].strip() == "NAME":
-                    instance.instance_name = content[1].strip()
-                elif content[0].strip() == "TYPE":
-                    instance.type = content[1].strip()
-                elif content[0].strip() == "DIMENSION":
-                    instance.dimension = int(content[1].strip())
-                elif content[0].strip() == "EDGE_WEIGHT_TYPE":
-                    instance.edge_weight_type = content[1].strip()
-                elif content[0].strip() == "EDGE_WEIGHT_FORMAT":
-                    instance.edge_weight_format = content[1].strip()
-                elif content[0].strip() == "NODE_COORD_SECTION":
-                    DataLoader.read_node_section(
-                        data[idx + 1 : idx + instance.dimension + 1], instance
-                    )
-                elif content[0].strip() == "DISPLAY_DATA_SECTION":
-                    DataLoader.read_node_section(
-                        data[idx + 1 : idx + instance.dimension + 1], instance
-                    )
-                elif content[0].strip() == "EDGE_WEIGHT_SECTION":
-                    # get the line for the next section
-                    next_section = -1
-                    for tmp_idx, tmp_line in enumerate(data[idx + 1 :]):
-                        line_first_word = tmp_line.split()[0]
-                        if not line_first_word.isnumeric():
-                            next_section = idx + 1 + tmp_idx
-                            break
-                    DataLoader.read_edge_weight_section(
-                        data[idx + 1 : next_section], instance
-                    )
-        file.close()
-
-        if not instance.distance_matrix:
-            instance.generate_distance_matrix()
-        # read the optimal tour
-
-        return instance
-
     @staticmethod
     def read_optimal_tour(filename: str):
         """reads the optimal tour from the file"""
@@ -172,7 +99,7 @@ class DataLoader:
             logger.warning("Optimal tour file %s not found", filename)
 
     @staticmethod
-    def write_to_file(filename, instance: TSPInstance, write_distance_matrix=True):
+    def write_to_file(filename, instance, write_distance_matrix=True):
         """Write the instance to the file."""
         with open(filename, "w", encoding="utf-8") as file:
             to_file = "NODE_COORD_SECTION\n"

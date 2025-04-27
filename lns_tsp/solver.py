@@ -13,7 +13,6 @@ from lns_tsp.setup_logger import get_logger
 from lns_tsp.simulated_annealing import SimulatedAnnealing
 from lns_tsp.solver_config import SolverConfig
 from lns_tsp.solver_stats import SolverStats
-from lns_tsp.tsp_instance import TSPInstance
 
 logger = get_logger(__name__)
 

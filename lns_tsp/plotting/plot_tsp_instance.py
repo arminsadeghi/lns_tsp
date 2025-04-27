@@ -2,12 +2,11 @@
 
 import matplotlib.pyplot as plt
 
-from lns_tsp.tsp_instance import TSPInstance
 
 colors = ["blue", "green", "yellow", "orange", "purple", "pink"]
 
 
-def plot_tsp_instance(instance: TSPInstance, tours):
+def plot_tsp_instance(instance, tours):
     """Plots the TSP instance."""
     x_locations = [instance.nodes[i].location.x for i in range(instance.dimension)]
     y_locations = [instance.nodes[i].location.y for i in range(instance.dimension)]

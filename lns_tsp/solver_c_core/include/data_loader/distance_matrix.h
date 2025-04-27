@@ -11,6 +11,7 @@
 
 void create_distance_matrix(TSPInstance *instance);
 void create_distance_matrix_EUC_2D(TSPInstance *instance);
+void create_distance_matrix_ATT(TSPInstance *instance);
 void read_distance_matrix(FILE *file, TSPInstance *instance);
 
 #endif // DATA_LOADER_DISTANCE_MATRIX_H_
