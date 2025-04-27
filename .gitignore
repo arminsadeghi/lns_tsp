@@ -1,0 +1,9 @@
+__pycache__/
+data/
+*.so
+*.egg
+*.egg-info/
+.vscode/
+build/
+dist/
+tests/

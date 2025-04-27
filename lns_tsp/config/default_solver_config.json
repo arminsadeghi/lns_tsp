@@ -1,0 +1,34 @@
+{
+  "max_iterations": 100000,
+  "max_no_improvement": 10000,
+  "max_time": 5,
+  "max_num_to_remove": 200,
+  "log_frequency": 5000,
+  "log": true,
+  "post_processing_probability": 0.1,
+  "simulated_annealing": {
+    "initial_temperature": 10000,
+    "cooling_rate": 0.99999
+  },
+  "heuristics": {
+    "weights": [
+      {
+        "name": "random_removal",
+        "weight": 1
+      },
+      {
+        "name": "worst_removal",
+        "weight": 1
+      },
+      {
+        "name": "cheapest_insertion",
+        "weight": 1
+      },
+      {
+        "name": "nearest_insertion",
+        "weight": 1
+      }
+    ],
+    "increment": 0.001
+  }
+}
