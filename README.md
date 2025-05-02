@@ -43,3 +43,5 @@ The solver can be configured using a JSON file. The configuration file should co
   - `heuristic_type`: The type of heuristic to use for removal and insertion.
   - `heuristic_probability`: The probability of applying the heuristic.
   - `increment`: The increment for the heuristic probability.
+
+The default configuration file is provided in the `lns_tps/config/default_solver_config.json`. You can modify it to suit your needs.
