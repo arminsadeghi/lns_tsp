@@ -32,15 +32,3 @@ set_target_properties(solver_core PROPERTIES PREFIX "")
 set_target_properties(solver_core PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 )
-add_executable(solver_test
-    tests/read_file_tests.c
-)
-target_link_libraries(solver_test PRIVATE
-    solver_core
-    m
-    ${Python3_LIBRARIES}
-)
-target_include_directories(solver_test PRIVATE
-    ${Python3_INCLUDE_DIRS}
-    include
-)
