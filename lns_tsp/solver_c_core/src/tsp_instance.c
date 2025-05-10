@@ -40,11 +40,34 @@ static PyObject *PyTSPInstance_get_dimension(PyTSPInstance *self,
   return PyLong_FromLong(self->instance->dimension);
 }
 
+// Expose edge_weight_type to Python
+static PyObject *PyTSPInstance_get_edge_weight_type(PyTSPInstance *self,
+                                                    void *closure) {
+  return PyUnicode_FromString(self->instance->edge_weight_type);
+}
+
+// Expose edge_weight_format to Python
+static PyObject *PyTSPInstance_get_edge_weight_format(PyTSPInstance *self,
+                                                      void *closure) {
+  return PyUnicode_FromString(self->instance->edge_weight_format);
+}
+
+// Expose type to Python
+static PyObject *PyTSPInstance_get_type(PyTSPInstance *self, void *closure) {
+  return PyUnicode_FromString(self->instance->type);
+}
+
 // List of getters
 static PyGetSetDef PyTSPInstance_getsetters[] = {
     {"instance_name", (getter)PyTSPInstance_get_instance_name, NULL,
      "instance name", NULL},
     {"dimension", (getter)PyTSPInstance_get_dimension, NULL, "dimension", NULL},
+    {"get_edge_weight_type", (getter)PyTSPInstance_get_edge_weight_type, NULL,
+     "edge_weight_type", NULL},
+    {"get_edge_weight_format", (getter)PyTSPInstance_get_edge_weight_format,
+     NULL, "edge_weight_format", NULL},
+    {"get_edge_weight_type", (getter)PyTSPInstance_get_edge_weight_type, NULL,
+     "edge_weight_type", NULL},
     {NULL} /* Sentinel */
 };
 
