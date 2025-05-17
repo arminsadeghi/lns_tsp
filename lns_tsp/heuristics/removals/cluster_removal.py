@@ -1,11 +1,4 @@
-"""
-@File    :   cluster_removal.py
-@Time    :   2023/09/17
-@Author  :   Armin Sadeghi
-@Version :   0.1
-@Contact :   a6sadegh@uwaterloo.ca
-@Desc    :   None
-"""
+"""Cluster removal heuristic for TSP."""
 
 from lns_tsp import solver_core
 from lns_tsp.solver_core import TSPInstance

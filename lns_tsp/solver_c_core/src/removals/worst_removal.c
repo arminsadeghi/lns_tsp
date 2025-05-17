@@ -36,7 +36,8 @@ void worst_removal_c(TSPInstance *instance, int *tour, int tour_length,
   }
 }
 
-extern PyObject *worst_removal(PyObject *self, PyObject *args) {
+extern PyObject *worst_removal(PyObject *_self, PyObject *args) {
+  (void)_self; // Unused parameter
   PyObject *py_tour;
   PyObject *py_instance;
   int py_tour_length;

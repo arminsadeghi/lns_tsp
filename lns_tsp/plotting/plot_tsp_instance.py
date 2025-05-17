@@ -2,7 +2,6 @@
 
 import matplotlib.pyplot as plt
 
-
 colors = ["blue", "green", "yellow", "orange", "purple", "pink"]
 
 

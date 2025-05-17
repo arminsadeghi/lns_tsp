@@ -22,6 +22,15 @@ void free_instance(TSPInstance *instance) {
 }
 
 static void PyTSPInstance_dealloc(PyTSPInstance *self) {
+  if (self->instance->distance_matrix != NULL) {
+    for (int i = 0; i < self->instance->dimension; i++) {
+      free(self->instance->distance_matrix[i]);
+    }
+    free(self->instance->distance_matrix);
+  }
+  if (self->instance->nodes != NULL) {
+    free(self->instance->nodes);
+  }
   if (self->instance) {
     free(self->instance);
   }
@@ -30,30 +39,35 @@ static void PyTSPInstance_dealloc(PyTSPInstance *self) {
 
 // Expose instance_name to Python
 static PyObject *PyTSPInstance_get_instance_name(PyTSPInstance *self,
-                                                 void *closure) {
+                                                 void *_closure) {
+  (void)_closure; // Unused parameter
   return PyUnicode_FromString(self->instance->instance_name);
 }
 
 // Expose dimension to Python
 static PyObject *PyTSPInstance_get_dimension(PyTSPInstance *self,
-                                             void *closure) {
+                                             void *_closure) {
+  (void)_closure; // Unused parameter
   return PyLong_FromLong(self->instance->dimension);
 }
 
 // Expose edge_weight_type to Python
 static PyObject *PyTSPInstance_get_edge_weight_type(PyTSPInstance *self,
-                                                    void *closure) {
+                                                    void *_closure) {
+  (void)_closure; // Unused parameter
   return PyUnicode_FromString(self->instance->edge_weight_type);
 }
 
 // Expose edge_weight_format to Python
 static PyObject *PyTSPInstance_get_edge_weight_format(PyTSPInstance *self,
-                                                      void *closure) {
+                                                      void *_closure) {
+  (void)_closure; // Unused parameter
   return PyUnicode_FromString(self->instance->edge_weight_format);
 }
 
 // Expose type to Python
-static PyObject *PyTSPInstance_get_type(PyTSPInstance *self, void *closure) {
+static PyObject *PyTSPInstance_get_type(PyTSPInstance *self, void *_closure) {
+  (void)_closure; // Unused parameter
   return PyUnicode_FromString(self->instance->type);
 }
 
@@ -68,6 +82,7 @@ static PyGetSetDef PyTSPInstance_getsetters[] = {
      NULL, "edge_weight_format", NULL},
     {"get_edge_weight_type", (getter)PyTSPInstance_get_edge_weight_type, NULL,
      "edge_weight_type", NULL},
+     {"get_type", (getter)PyTSPInstance_get_type, NULL, "type", NULL},
     {NULL} /* Sentinel */
 };
 
@@ -83,7 +98,7 @@ PyTypeObject PyTSPInstance_Type = {
 
 // Constructor function
 PyObject *PyTSPInstance_New(TSPInstance *instance) {
-  PyTSPInstance *self = PyObject_New(PyTSPInstance, &PyTSPInstance_Type);
+  PyTSPInstance *self = (PyTSPInstance *)PyObject_New(PyTSPInstance, &PyTSPInstance_Type);
   if (!self) {
     free(instance);
     return NULL;

@@ -52,7 +52,7 @@ void print_instance(const TSPInstance *instance) {
   printf("Edge Weight Format: %s\n", instance->edge_weight_format);
 }
 
-int read_instance_from_file(TSPInstance *instance, char *filename) {
+int read_instance_from_file(TSPInstance *instance, const char *filename) {
   FILE *file = open_file(filename);
   if (!file) {
     fprintf(stderr, "Error opening file: %s\n", filename);
@@ -73,19 +73,25 @@ void read_node_section(FILE *file, TSPInstance *instance) {
   char line[MAX_LINE];
   instance->nodes = malloc(instance->dimension * sizeof(Node));
   for (int i = 0; i < instance->dimension; i++) {
-    fgets(line, sizeof(line), file);
+    if (fgets(line, sizeof(line), file) == NULL) {
+      PyErr_Format(PyExc_ValueError, "Could not read node data for node %d",
+                   i + 1);
+      free(instance->nodes);
+      return;
+    }
     sscanf(line, "%d %f %f", &instance->nodes[i].id, &instance->nodes[i].x,
            &instance->nodes[i].y);
     instance->nodes[i].id--;
   }
 }
 
-extern PyObject *read_instance_from_file_py(PyObject *self, PyObject *args) {
+extern PyObject *read_instance_from_file_py(PyObject *_self, PyObject *args) {
+  (void)_self; // Unused parameter
   PyObject *filename;
   if (!PyArg_ParseTuple(args, "O", &filename)) {
     return NULL;
   }
-  char *filename_str = PyUnicode_AsUTF8(filename);
+  const char *filename_str = PyUnicode_AsUTF8(filename);
   if (!filename_str) {
     return NULL;
   }
@@ -97,15 +103,11 @@ extern PyObject *read_instance_from_file_py(PyObject *self, PyObject *args) {
   instance->type[0] = '\0';
   instance->edge_weight_type[0] = '\0';
   instance->edge_weight_format[0] = '\0';
-  instance->edge_weight_type[0] = '\0';
-  instance->edge_weight_format[0] = '\0';
-  instance->edge_weight_type[0] = '\0';
-  instance->edge_weight_format[0] = '\0';
   read_instance_from_file(instance, filename_str);
-  PyTSPInstance *py_instance = PyTSPInstance_New(instance);
+  PyObject *py_instance = (PyObject *)PyTSPInstance_New(instance);
   if (!py_instance) {
     free(instance);
     return NULL;
   }
-  return (PyObject *)py_instance;
+  return py_instance;
 }

@@ -4,6 +4,7 @@
  * @version 0.1
  */
 #include "data_loader/distance_matrix.h"
+#include <Python.h>
 
 void read_distance_matrix(FILE *file, TSPInstance *instance) {
   if (instance->dimension <= 0) {
@@ -17,14 +18,26 @@ void read_distance_matrix(FILE *file, TSPInstance *instance) {
   if (strcmp(instance->edge_weight_format, "FULL_MATRIX") == 0) {
     for (int i = 0; i < instance->dimension; i++) {
       for (int j = 0; j < instance->dimension; j++) {
-        fscanf(file, "%f", &instance->distance_matrix[i][j]);
+        if (fscanf(file, "%f", &instance->distance_matrix[i][j]) != 1) {
+          PyErr_Format(PyExc_ValueError,
+                       "Failed to read float value for distance_matrix[%d][%d]",
+                       i, j);
+          fclose(file);
+          return;
+        }
       }
     }
   } else if (strcmp(instance->edge_weight_format, "UPPER_ROW") == 0) {
     for (int i = 0; i < instance->dimension; i++) {
       instance->distance_matrix[i][i] = 0;
       for (int j = i + 1; j < instance->dimension; j++) {
-        fscanf(file, "%f", &instance->distance_matrix[i][j]);
+        if (fscanf(file, "%f", &instance->distance_matrix[i][j]) != 1) {
+          PyErr_Format(PyExc_ValueError,
+                       "Failed to read float value for distance_matrix[%d][%d]",
+                       i, j);
+          fclose(file);
+          return;
+        }
         instance->distance_matrix[j][i] = instance->distance_matrix[i][j];
       }
     }

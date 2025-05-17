@@ -79,8 +79,6 @@ void twist_move_c(TSPInstance *instance, NodeList *tour) {
 
 void twist_(NodeList *node1, NodeList *node2) {
   NodeList *node1_prev = node1->prev;
-  NodeList *node1_next = node1->next;
-  NodeList *node2_prev = node2->prev;
   NodeList *node2_next = node2->next;
 
   node1_prev->next = node2;
@@ -103,10 +101,7 @@ void twist_(NodeList *node1, NodeList *node2) {
 }
 
 void revert_twist_(NodeList *node1, NodeList *node2) {
-  NodeList *node2_prev = node1->prev;
   NodeList *node2_next = node1->next;
-  NodeList *node1_prev = node2->prev;
-  NodeList *node1_next = node2->next;
 
   node2->next = node1;
   node1->next = node2_next;
@@ -124,7 +119,8 @@ void revert_twist_(NodeList *node1, NodeList *node2) {
   }
 }
 
-extern PyObject *twist_move(PyObject *self, PyObject *args) {
+extern PyObject *twist_move(PyObject *_self, PyObject *args) {
+  (void)_self; // Unused parameter
   PyObject *py_tour;
   PyObject *py_instance;
   int py_tour_length;

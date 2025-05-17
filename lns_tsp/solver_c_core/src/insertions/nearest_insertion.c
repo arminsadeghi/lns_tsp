@@ -47,7 +47,7 @@ void nearest_insertion_c(TSPInstance *instance, NodeList *tour,
       break;
     // insert the last node to the tour.
     if (nodes_to_add->next == NULL) {
-      Insertion best_insertion = best_insertion_c(instance, tour, nodes_to_add);
+      best_insertion = best_insertion_c(instance, tour, nodes_to_add);
       insert_node_c(best_insertion.pos, nodes_to_add);
       free(nodes_to_add);
       break;
@@ -55,7 +55,8 @@ void nearest_insertion_c(TSPInstance *instance, NodeList *tour,
   }
 }
 
-extern PyObject *nearest_insertion(PyObject *self, PyObject *args) {
+extern PyObject *nearest_insertion(PyObject *_self, PyObject *args) {
+  (void)_self; // Unused parameter
   PyObject *py_tour;
   PyObject *py_instance;
   int py_tour_length;
@@ -89,7 +90,6 @@ extern PyObject *nearest_insertion(PyObject *self, PyObject *args) {
     if (current == tour)
       break;
   }
-  NodeList *current_node = nodes_to_add;
   free_node_list(tour);
   return py_new_tour;
 }

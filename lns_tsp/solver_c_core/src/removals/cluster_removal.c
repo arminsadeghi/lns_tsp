@@ -48,7 +48,8 @@ void cluster_removal_c(TSPInstance *instance, int *tour, int tour_length,
   }
 }
 
-extern PyObject *cluster_removal(PyObject *self, PyObject *args) {
+extern PyObject *cluster_removal(PyObject *_self, PyObject *args) {
+  (void)_self; // Unused parameter
   PyObject *py_tour;
   PyObject *py_instance;
   int py_tour_length;
@@ -73,8 +74,6 @@ extern PyObject *cluster_removal(PyObject *self, PyObject *args) {
   for (int i = 0; i < py_tour_length; ++i) {
     PyList_SetItem(py_new_tour, i, PyLong_FromLong(tour[i]));
   }
-
   free(tour);
-
   return py_new_tour;
 }

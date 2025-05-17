@@ -3,15 +3,15 @@
 import random
 import time
 
-from lns_tsp.data_util import DataLoader
 from lns_tsp import solver_core
-from lns_tsp.solver_core import objective_value
+from lns_tsp.data_util import DataLoader
 from lns_tsp.exceptions import InvalidTour
 from lns_tsp.heuristic_selection import HeuristicChooser
 from lns_tsp.heuristics.twist_move import twist_move
 from lns_tsp.setup_logger import get_logger
 from lns_tsp.simulated_annealing import SimulatedAnnealing
 from lns_tsp.solver_config import SolverConfig
+from lns_tsp.solver_core import objective_value
 from lns_tsp.solver_stats import SolverStats
 
 logger = get_logger(__name__)
@@ -31,7 +31,6 @@ class Solver:
         self._simulated_annealing = SimulatedAnnealing(config)
         self._heuristic_chooser = HeuristicChooser(config)
         self.stats = SolverStats(config, self.instance)
-        self._solver_c = solver_core
 
     def run(self):
         """Run the iterations."""
