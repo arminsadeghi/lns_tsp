@@ -38,7 +38,8 @@ double objective_value_node_list(TSPInstance *instance, NodeList *tour) {
   return objective_value;
 }
 
-extern PyObject *objective_value(PyObject *self, PyObject *args) {
+extern PyObject *objective_value(PyObject *_self, PyObject *args) {
+  (void)_self; // Unused parameter
   PyObject *py_tour;
   PyObject *py_instance;
   int tour_length;
@@ -58,9 +59,3 @@ extern PyObject *objective_value(PyObject *self, PyObject *args) {
   free(tour);
   return Py_BuildValue("d", objective_value);
 }
-
-static PyMethodDef solver_c_methods[] = {
-    {"objective_value", objective_value, METH_VARARGS,
-     "Calculate the objective value of a tour"},
-    {NULL, NULL, 0, NULL} // Sentinel
-};

@@ -2,8 +2,6 @@
 
 import argparse
 
-from lns_tsp.data_util import DataLoader
-from lns_tsp.plotting.plot_tsp_instance import plot_tsp_instance
 from lns_tsp.setup_logger import get_logger
 from lns_tsp.solver import Solver
 from lns_tsp.solver_config import SolverConfig
@@ -30,13 +28,11 @@ def main():
         help="Path to the solver config file.",
     )
     args = parser.parse_args()
-
     config = (
         SolverConfig.from_config_file(args.config_file)
         if args.config_file is not None
         else SolverConfig()
     )
-
     solver = Solver(config, args.instance)
     solver.run()
 

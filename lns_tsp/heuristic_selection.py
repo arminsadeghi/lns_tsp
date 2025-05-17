@@ -7,16 +7,28 @@ from lns_tsp.heuristics.insertions import (
     nearest_insertion,
     random_insertion,
 )
-from lns_tsp.heuristics.removals import cluster_removal, random_removal, worst_removal
+from lns_tsp.heuristics.removals import (
+    cluster_removal,
+    path_removal,
+    random_removal,
+    worst_removal,
+)
 from lns_tsp.heuristics.twist_move import twist_move
 
-HEURISTICS = {
-    "worst_removal": worst_removal,
-    "random_removal": random_removal,
+INSERTION_HEURISTICS = {
     "random_insertion": random_insertion,
     "cheapest_insertion": cheapest_insertion,
     "nearest_insertion": nearest_insertion,
+}
+
+REMOVAL_HEURISTICS = {
+    "worst_removal": worst_removal,
+    "random_removal": random_removal,
     "cluster_removal": cluster_removal,
+    "path_removal": path_removal,
+}
+
+POST_PROCESSING_HEURISTICS = {
     "twist_move": twist_move,
 }
 
@@ -71,7 +83,10 @@ class HeuristicChooser:
             removal_heuristic = random_removal
         self._last_removal_heuristic = removal_heuristic
 
-        return HEURISTICS[insertion_heuristic], HEURISTICS[removal_heuristic]
+        return (
+            INSERTION_HEURISTICS[insertion_heuristic],
+            REMOVAL_HEURISTICS[removal_heuristic],
+        )
 
     def increase_weight(self, heuristic):
         """Increase the weight of the heuristic."""

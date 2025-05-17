@@ -39,10 +39,17 @@ static PyMethodDef solver_c_methods[] = {
     {NULL, NULL, 0, NULL} // Sentinel
 };
 
-static struct PyModuleDef solver_core_module =
-    { // <-- renamed to solver_core_module
-        PyModuleDef_HEAD_INIT, "solver_core",
-        "C implementation of LNS heuristics for TSP", -1, solver_c_methods};
+static struct PyModuleDef solver_core_module = {
+    PyModuleDef_HEAD_INIT,
+    "solver_c",                            // m_name
+    "C implementation of LNS heuristics for TSP", // m_doc
+    -1,                                    // m_size
+    solver_c_methods,                     // m_methods
+    NULL,                                  // m_slots
+    NULL,                                  // m_traverse
+    NULL,                                  // m_clear
+    NULL                                   // m_free
+};
 
 PyMODINIT_FUNC PyInit_solver_core(void) {
   PyObject *m = PyModule_Create(&solver_core_module);
